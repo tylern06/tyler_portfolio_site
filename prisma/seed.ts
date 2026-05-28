@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 
-const prisma = new PrismaClient()
+const adapter = new PrismaPg(process.env.DATABASE_URL!)
+const prisma = new PrismaClient({ adapter })
 const BLOG_DIR = path.join(process.cwd(), 'content/blog')
 
 async function main() {
