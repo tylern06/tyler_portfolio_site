@@ -103,3 +103,36 @@ This project uses **Next.js 16**, **React 19**, **Tailwind CSS v4**, **Prisma 7 
 - Headings must follow a logical hierarchy: one `<h1>` per page, then `<h2>`, `<h3>` — never skip levels.
 - Form inputs require associated `<label>` elements. Error messages must reference the input via `aria-describedby`.
 - Use semantic HTML first (`<nav>`, `<main>`, `<article>`, `<section>`, `<aside>`, `<footer>`) before reaching for `<div>`.
+
+---
+
+## Git Commit Messages
+
+- Use the imperative mood in the subject line: "Add feature" not "Added feature" or "Adds feature".
+- Keep the subject line under 72 characters.
+- Use one of these prefixes to categorize the change:
+  - `feat:` — new feature
+  - `fix:` — bug fix
+  - `refactor:` — code change that neither fixes a bug nor adds a feature
+  - `style:` — formatting, missing semicolons, etc. (no logic change)
+  - `docs:` — documentation only
+  - `chore:` — build process, dependency updates, tooling
+  - `test:` — adding or updating tests
+- Capitalize the first word after the prefix.
+- Do not end the subject line with a period.
+- If the change needs explanation, add a blank line after the subject and write a short body paragraph explaining the *why*, not the *what*.
+- Reference related issues or PRs at the end of the body: `Closes #123`.
+
+**Examples:**
+```
+feat: Add PostgreSQL blog post storage via Prisma
+
+Replaces filesystem-based markdown reads with a Prisma-backed
+PostgreSQL store so posts can be managed without filesystem access.
+```
+```
+fix: Prevent duplicate post seeding on re-run
+```
+```
+chore: Install @prisma/adapter-pg and pg driver
+```
