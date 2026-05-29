@@ -82,6 +82,18 @@ This project uses **Next.js 16**, **React 19**, **Tailwind CSS v4**, **Prisma 7 
 
 ---
 
+## Error Handling
+
+- Every `async` function that calls an external boundary (database, HTTP API, filesystem, third-party SDK) must be wrapped in `try/catch`. "External boundary" means anything that can fail for reasons outside your control.
+- API route handlers (`app/api/**/route.ts`) must catch all errors and return an appropriate HTTP response — never let an unhandled exception reach the framework. Wrap the entire handler body or each distinct async operation.
+- Functions in `lib/` that query the database should catch errors, log them with a descriptive prefix (e.g. `[blog] getAllPosts failed:`), and return a safe fallback (`[]`, `null`, `false`) so callers do not need to handle DB failures individually.
+- Scripts in `scripts/` should use `.catch()` on the top-level call and `process.exit(1)` on failure so the scheduler/cron can detect errors.
+- Use `err instanceof Error ? err.message : String(err)` when logging caught values — never `err.message` directly, because thrown values are not guaranteed to be `Error` instances.
+- Do not catch errors silently. Every `catch` block must either log the error, re-throw it, or return an error response. An empty `catch {}` is forbidden.
+- Separate error handling by concern: catch network errors, parse errors, and DB errors in distinct blocks with specific messages rather than one monolithic catch.
+
+---
+
 ## TypeScript
 
 - `strict` mode is on. Do not use `any` — use `unknown` and narrow, or define a proper interface/type.
