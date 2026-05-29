@@ -10,7 +10,12 @@
     "generate:post": "npx ts-node --esm scripts/generate-post.ts",
     "scheduler": "node scripts/scheduler.js",
     "db:seed": "prisma db seed",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "docker:postgres:start": "docker-compose up -d postgres",
+    "docker:postgres:stop": "docker-compose stop postgres",
+    "docker:postgres:down": "docker-compose down",
+    "docker:postgres:logs": "docker-compose logs -f postgres",
+    "docker:postgres:clean": "docker-compose down -v"
   },
   "prisma": {
     "seed": "ts-node -P tsconfig.seed.json prisma/seed.ts"
