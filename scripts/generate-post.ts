@@ -55,49 +55,61 @@ async function generatePost(): Promise<void> {
 
   const systemPrompt = `You are a senior software engineer and technical writer.
 Write an engaging, opinionated blog post for a personal portfolio site.
-The author is Tyler Nguyen — a full stack engineer with 8+ years experience in FinTech and warehouse management,
+The author is Tyler Nguyen, a full stack engineer with 8+ years experience in FinTech and warehouse management,
 expert in React, TypeScript, Node.js, and AWS.
 
 Respond ONLY with a JSON object matching this exact shape:
 {
-  "title": "string — compelling post title",
-  "slug": "string — url-friendly slug (lowercase, hyphens only)",
-  "excerpt": "string — 1–2 sentence summary, no spoilers",
+  "title": "string: compelling post title",
+  "slug": "string: url-friendly slug (lowercase, hyphens only)",
+  "excerpt": "string: 1-2 sentence summary, no spoilers",
   "tags": ["string", ...],
-  "content": "string — full post in markdown, 600–900 words, first-person voice, concrete and specific"
+  "content": "string: full post in markdown, 600-900 words, first-person voice, concrete and specific"
 }
 
 Rules:
 - Write from Tyler's perspective with real engineering experience
 - Include specific code examples or concrete patterns where relevant
 - Use a natural, human-like tone with no em dashes
-- No preamble, no explanation — just the JSON object`
+- No preamble, no explanation: just the JSON object`
 
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://tyler-nguyen.dev',
-      'X-Title': 'Tyler Nguyen Portfolio Blog Generator',
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: `Write a blog post about: ${topic}` },
-      ],
-      response_format: { type: 'json_object' },
-      temperature: 0.8,
-    }),
-  })
-
-  if (!res.ok) {
-    const err = await res.text()
-    throw new Error(`OpenRouter error ${res.status}: ${err}`)
+  let res: Response
+  try {
+    res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://tyler-nguyen.dev',
+        'X-Title': 'Tyler Nguyen Portfolio Blog Generator',
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `Write a blog post about: ${topic}` },
+        ],
+        response_format: { type: 'json_object' },
+        temperature: 0.8,
+      }),
+    })
+  } catch (err) {
+    throw new Error(`Network error calling OpenRouter: ${err instanceof Error ? err.message : err}`)
   }
 
-  const data = await res.json()
+  if (!res.ok) {
+    let body = ''
+    try { body = await res.text() } catch { /* ignore */ }
+    throw new Error(`OpenRouter error ${res.status}: ${body}`)
+  }
+
+  let data: { choices?: Array<{ message?: { content?: string } }> }
+  try {
+    data = await res.json()
+  } catch (err) {
+    throw new Error(`Failed to parse OpenRouter response: ${err instanceof Error ? err.message : err}`)
+  }
+
   const raw = data.choices?.[0]?.message?.content
   if (!raw) throw new Error('Empty response from OpenRouter')
 
@@ -105,28 +117,32 @@ Rules:
   try {
     post = JSON.parse(raw)
   } catch {
-    throw new Error(`Failed to parse JSON response: ${raw.slice(0, 200)}`)
+    throw new Error(`Failed to parse post JSON: ${raw.slice(0, 200)}`)
   }
 
   const slug = post.slug || slugify(post.title)
 
-  const existing = await prisma.post.findUnique({ where: { slug } })
-  if (existing) {
-    console.log(`Post already exists: ${slug} — skipping`)
-    return
-  }
+  try {
+    const existing = await prisma.post.findUnique({ where: { slug } })
+    if (existing) {
+      console.log(`Post already exists: ${slug} — skipping`)
+      return
+    }
 
-  await prisma.post.create({
-    data: {
-      slug,
-      title: post.title,
-      excerpt: post.excerpt,
-      tags: post.tags,
-      date: new Date(today()),
-      published: true,
-      content: post.content,
-    },
-  })
+    await prisma.post.create({
+      data: {
+        slug,
+        title: post.title,
+        excerpt: post.excerpt,
+        tags: post.tags,
+        date: new Date(today()),
+        published: true,
+        content: post.content,
+      },
+    })
+  } catch (err) {
+    throw new Error(`Database error: ${err instanceof Error ? err.message : err}`)
+  }
 
   console.log(`✓ Saved to database: ${slug}`)
 }

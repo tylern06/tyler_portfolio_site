@@ -11,17 +11,28 @@ export interface BlogPost {
 }
 
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    orderBy: { date: 'desc' },
-  })
-  return posts.map(toPost)
+  try {
+    const posts = await prisma.post.findMany({
+      where: { published: true },
+      orderBy: { date: 'desc' },
+      select: { slug: true, title: true, excerpt: true, tags: true, date: true, published: true, content: true },
+    })
+    return posts.map(toPost)
+  } catch (err) {
+    console.error('[blog] getAllPosts failed:', err)
+    return []
+  }
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const post = await prisma.post.findUnique({ where: { slug } })
-  if (!post || !post.published) return null
-  return toPost(post)
+  try {
+    const post = await prisma.post.findUnique({ where: { slug } })
+    if (!post || !post.published) return null
+    return toPost(post)
+  } catch (err) {
+    console.error(`[blog] getPostBySlug(${slug}) failed:`, err)
+    return null
+  }
 }
 
 function toPost(p: {
