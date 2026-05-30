@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:16
     container_name: tyler-postgres
     environment:
-      POSTGRES_USER: ${DB_USER:-USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-PASSWORD}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_NAME:-tyler_portfolio}
     ports:
       - "5432:5432"
