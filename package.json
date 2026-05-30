@@ -12,6 +12,7 @@
     "db:seed": "prisma db seed",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
+    "db:view": "ts-node -P tsconfig.seed.json scripts/view-posts.ts",
     "docker:postgres:start": "docker-compose up -d postgres",
     "docker:postgres:stop": "docker-compose stop postgres",
     "docker:postgres:down": "docker-compose down",
@@ -20,8 +21,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.98.0",
-    "@prisma/adapter-pg": "^7.8.0",
-    "@prisma/client": "^7.8.0",
+    "@prisma/adapter-pg": "^6.19.3",
+    "@prisma/client": "^6.19.3",
     "@types/node-cron": "^3.0.11",
     "@types/pg": "^8.20.0",
     "clsx": "^2.1.1",
@@ -32,7 +33,7 @@
     "next": "16.2.6",
     "node-cron": "^4.2.1",
     "pg": "^8.21.0",
-    "prisma": "^7.8.0",
+    "prisma": "^6.19.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-markdown": "^10.1.0",
@@ -48,6 +49,6 @@
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   }
 }

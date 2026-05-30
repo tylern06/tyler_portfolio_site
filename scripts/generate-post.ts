@@ -11,7 +11,7 @@ import { PrismaPg } from '@prisma/adapter-pg'
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
 const MODEL = process.env.OPENROUTER_MODEL ?? 'google/gemini-2.0-flash-001'
 
-const adapter = new PrismaPg(process.env.DATABASE_URL!)
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
 const prisma = new PrismaClient({ adapter })
 
 const TOPICS = [
