@@ -1,41 +1,28 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useTheme as useNextTheme, ThemeProvider as NextThemesProvider } from 'next-themes'
 
 export type Theme = 'default' | 'mono'
 
-interface ThemeContextValue {
-  theme: Theme
-  toggle: () => void
-}
-
-const ThemeContext = createContext<ThemeContextValue>({ theme: 'default', toggle: () => {} })
-
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return 'default'
-    const stored = window.localStorage.getItem('theme')
-    return stored === 'mono' || stored === 'default' ? stored : 'default'
-  })
-
-  useEffect(() => {
-    if (theme === 'mono') {
-      document.documentElement.setAttribute('data-theme', 'mono')
-    } else {
-      document.documentElement.removeAttribute('data-theme')
-    }
-    localStorage.setItem('theme', theme)
-  }, [theme])
-
-  function toggle() {
-    setTheme((t) => (t === 'default' ? 'mono' : 'default'))
-  }
-
   return (
-    <ThemeContext.Provider value={{ theme, toggle }}>
+    <NextThemesProvider
+      attribute="data-theme"
+      defaultTheme="default"
+      themes={['default', 'mono']}
+      enableSystem={false}
+      disableTransitionOnChange
+    >
       {children}
-    </ThemeContext.Provider>
+    </NextThemesProvider>
   )
 }
 
-export const useTheme = () => useContext(ThemeContext)
+export function useTheme() {
+  const { theme, setTheme } = useNextTheme()
+
+  return {
+    theme: (theme as Theme) ?? 'default',
+    toggle: () => setTheme(theme === 'mono' ? 'default' : 'mono'),
+  }
+}
