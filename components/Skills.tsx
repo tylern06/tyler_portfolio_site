@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import AnimatedSection from './AnimatedSection'
-import { skills } from '@/data/resume'
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import AnimatedSection from './AnimatedSection';
+import { skills } from '@/data/resume';
 
 const categoryIcons: Record<string, string> = {
   Frontend: '⚡',
   Backend: '🛠',
   'DevOps & Tools': '🚀',
   'AI & Emerging': '✨',
-}
+};
 
 export default function Skills() {
   return (
@@ -21,8 +21,7 @@ export default function Skills() {
         <AnimatedSection>
           <p className="section-tag">Skills</p>
           <h2 className="font-[var(--font-space-grotesk)] text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-16">
-            My tech{' '}
-            <span className="gradient-text">toolkit</span>
+            My tech <span className="gradient-text">toolkit</span>
           </h2>
         </AnimatedSection>
 
@@ -39,7 +38,7 @@ export default function Skills() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 function SkillCategory({
@@ -48,13 +47,13 @@ function SkillCategory({
   icon,
   index,
 }: {
-  category: string
-  items: string[]
-  icon: string
-  index: number
+  category: string;
+  items: string[];
+  icon: string;
+  index: number;
 }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
     <motion.div
@@ -84,5 +83,5 @@ function SkillCategory({
         ))}
       </div>
     </motion.div>
-  )
+  );
 }

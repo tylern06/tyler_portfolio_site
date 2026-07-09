@@ -1,28 +1,28 @@
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import ReactMarkdown from 'react-markdown'
-import { getAllPosts, getPostBySlug } from '@/lib/blog'
-import { Calendar, ArrowLeft } from 'lucide-react'
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import { getAllPosts, getPostBySlug } from '@/lib/blog';
+import { Calendar, ArrowLeft } from 'lucide-react';
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts()
-  return posts.map((p) => ({ slug: p.slug }))
+  const posts = await getAllPosts();
+  return posts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<'/blog/[slug]'>) {
-  const { slug } = await params
-  const post = await getPostBySlug(slug)
-  if (!post) return {}
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  if (!post) return {};
   return {
     title: `${post.title} — Tyler Nguyen`,
     description: post.excerpt,
-  }
+  };
 }
 
 export default async function BlogPostPage({ params }: PageProps<'/blog/[slug]'>) {
-  const { slug } = await params
-  const post = await getPostBySlug(slug)
-  if (!post) notFound()
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  if (!post) notFound();
 
   return (
     <div className="min-h-screen pt-28 pb-24 px-6">
@@ -85,5 +85,5 @@ export default async function BlogPostPage({ params }: PageProps<'/blog/[slug]'>
         </div>
       </div>
     </div>
-  )
+  );
 }

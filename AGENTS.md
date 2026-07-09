@@ -132,19 +132,22 @@ This project uses **Next.js 16**, **React 19**, **Tailwind CSS v4**, **Prisma 7 
   - `test:` — adding or updating tests
 - Capitalize the first word after the prefix.
 - Do not end the subject line with a period.
-- If the change needs explanation, add a blank line after the subject and write a short body paragraph explaining the *why*, not the *what*.
+- If the change needs explanation, add a blank line after the subject and write a short body paragraph explaining the _why_, not the _what_.
 - Reference related issues or PRs at the end of the body: `Closes #123`.
 
 **Examples:**
+
 ```
 feat: Add PostgreSQL blog post storage via Prisma
 
 Replaces filesystem-based markdown reads with a Prisma-backed
 PostgreSQL store so posts can be managed without filesystem access.
 ```
+
 ```
 fix: Prevent duplicate post seeding on re-run
 ```
+
 ```
 chore: Install @prisma/adapter-pg and pg driver
 ```

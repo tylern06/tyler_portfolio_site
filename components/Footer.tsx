@@ -1,10 +1,10 @@
-import Link from 'next/link'
-import { Mail } from 'lucide-react'
-import { GithubIcon, LinkedinIcon } from '@/components/SocialIcons'
-import { personalInfo } from '@/data/resume'
+import Link from 'next/link';
+import { Mail } from 'lucide-react';
+import { GithubIcon, LinkedinIcon } from '@/components/SocialIcons';
+import { personalInfo } from '@/data/resume';
 
 export default function Footer() {
-  const year = new Date().getFullYear()
+  const year = new Date().getFullYear();
   return (
     <footer className="border-t border-[var(--border-subtle)] py-10 mt-0">
       <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -40,5 +40,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

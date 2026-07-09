@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowDown, Sparkles } from 'lucide-react'
-import { GithubIcon, LinkedinIcon } from '@/components/SocialIcons'
-import { personalInfo } from '@/data/resume'
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowDown, Sparkles } from 'lucide-react';
+import { GithubIcon, LinkedinIcon } from '@/components/SocialIcons';
+import { personalInfo } from '@/data/resume';
 
 const roles = [
   'Full Stack Engineer',
@@ -12,52 +12,58 @@ const roles = [
   'TypeScript Advocate',
   'UI/UX Craftsman',
   'Open Source Contributor',
-]
+];
 
 function useTypewriter(words: string[], speed = 80, pause = 2200) {
-  const [text, setText] = useState('')
-  const [wordIdx, setWordIdx] = useState(0)
-  const [charIdx, setCharIdx] = useState(0)
-  const [deleting, setDeleting] = useState(false)
+  const [text, setText] = useState('');
+  const [wordIdx, setWordIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    const current = words[wordIdx]
+    const current = words[wordIdx];
 
-    const timeout = setTimeout(() => {
-      if (!deleting) {
-        setText(current.slice(0, charIdx + 1))
-        if (charIdx + 1 === current.length) {
-          setTimeout(() => setDeleting(true), pause)
+    const timeout = setTimeout(
+      () => {
+        if (!deleting) {
+          setText(current.slice(0, charIdx + 1));
+          if (charIdx + 1 === current.length) {
+            setTimeout(() => setDeleting(true), pause);
+          } else {
+            setCharIdx((c) => c + 1);
+          }
         } else {
-          setCharIdx((c) => c + 1)
+          setText(current.slice(0, charIdx - 1));
+          if (charIdx - 1 === 0) {
+            setDeleting(false);
+            setWordIdx((w) => (w + 1) % words.length);
+            setCharIdx(0);
+          } else {
+            setCharIdx((c) => c - 1);
+          }
         }
-      } else {
-        setText(current.slice(0, charIdx - 1))
-        if (charIdx - 1 === 0) {
-          setDeleting(false)
-          setWordIdx((w) => (w + 1) % words.length)
-          setCharIdx(0)
-        } else {
-          setCharIdx((c) => c - 1)
-        }
-      }
-    }, deleting ? speed / 2 : speed)
+      },
+      deleting ? speed / 2 : speed,
+    );
 
-    return () => clearTimeout(timeout)
-  }, [words, wordIdx, charIdx, deleting, speed, pause])
+    return () => clearTimeout(timeout);
+  }, [words, wordIdx, charIdx, deleting, speed, pause]);
 
-  return text
+  return text;
 }
 
 export default function Hero() {
-  const role = useTypewriter(roles)
+  const role = useTypewriter(roles);
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background gradient orbs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-glow-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] animate-glow-pulse" style={{ animationDelay: '2s' }} />
+        <div
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] animate-glow-pulse"
+          style={{ animationDelay: '2s' }}
+        />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-cyan-600/5 rounded-full blur-[150px]" />
         {/* Grid pattern */}
         <div
@@ -79,7 +85,9 @@ export default function Hero() {
             className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-8"
           >
             <Sparkles size={14} className="text-cyan-400" />
-            <span className="text-xs font-medium text-cyan-400">Available for new opportunities</span>
+            <span className="text-xs font-medium text-cyan-400">
+              Available for new opportunities
+            </span>
           </motion.div>
 
           {/* Name */}
@@ -89,8 +97,7 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="font-[var(--font-space-grotesk)] text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.05] mb-4"
           >
-            Hi, I&apos;m{' '}
-            <span className="gradient-text">Tyler Nguyen</span>
+            Hi, I&apos;m <span className="gradient-text">Tyler Nguyen</span>
           </motion.h1>
 
           {/* Typewriter role */}
@@ -112,7 +119,8 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-lg text-[var(--text-secondary)] leading-relaxed mb-10 max-w-xl"
           >
-            {personalInfo.tagline} I love building things that are fast, accessible, and genuinely delightful to use.
+            {personalInfo.tagline} I love building things that are fast, accessible, and genuinely
+            delightful to use.
           </motion.p>
 
           {/* CTA buttons */}
@@ -138,7 +146,9 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.8 }}
             className="flex items-center gap-5"
           >
-            <span className="text-xs text-[var(--text-muted)] uppercase tracking-widest">Find me on</span>
+            <span className="text-xs text-[var(--text-muted)] uppercase tracking-widest">
+              Find me on
+            </span>
             <div className="w-8 h-px bg-[var(--border-subtle)]" />
             <a
               href={personalInfo.github}
@@ -178,5 +188,5 @@ export default function Hero() {
         </motion.div>
       </motion.div>
     </section>
-  )
+  );
 }

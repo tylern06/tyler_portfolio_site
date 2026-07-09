@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { cn } from '@/lib/utils'
-import ThemeToggle from './ThemeToggle'
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
+import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -14,36 +14,38 @@ const navLinks = [
   { label: 'Skills', href: '#skills' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '#contact' },
-]
+];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState('')
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
-    const sections = ['about', 'experience', 'projects', 'skills', 'contact']
-    const observers: IntersectionObserver[] = []
+    const sections = ['about', 'experience', 'projects', 'skills', 'contact'];
+    const observers: IntersectionObserver[] = [];
 
     sections.forEach((id) => {
-      const el = document.getElementById(id)
-      if (!el) return
+      const el = document.getElementById(id);
+      if (!el) return;
       const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActiveSection(id) },
-        { threshold: 0.3 }
-      )
-      obs.observe(el)
-      observers.push(obs)
-    })
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id);
+        },
+        { threshold: 0.3 },
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
 
-    return () => observers.forEach((o) => o.disconnect())
-  }, [])
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
 
   return (
     <>
@@ -55,7 +57,7 @@ export default function Navbar() {
           'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
           scrolled
             ? 'bg-[var(--bg-primary)]/90 backdrop-blur-xl border-b border-[var(--border-subtle)] py-3'
-            : 'py-5'
+            : 'py-5',
         )}
       >
         <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between">
@@ -72,7 +74,7 @@ export default function Navbar() {
           {/* Desktop nav */}
           <ul className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = activeSection === link.href.replace('#', '')
+              const isActive = activeSection === link.href.replace('#', '');
               return (
                 <li key={link.href}>
                   <Link
@@ -81,13 +83,13 @@ export default function Navbar() {
                       'px-3 py-2 rounded-md text-sm font-medium transition-all duration-200',
                       isActive
                         ? 'text-[var(--accent-cyan)]'
-                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]',
                     )}
                   >
                     {link.label}
                   </Link>
                 </li>
-              )
+              );
             })}
           </ul>
 
@@ -153,5 +155,5 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }

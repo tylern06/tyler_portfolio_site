@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { ExternalLink, Star } from 'lucide-react'
-import { GithubIcon } from '@/components/SocialIcons'
-import AnimatedSection from './AnimatedSection'
-import { projects } from '@/data/resume'
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import { ExternalLink, Star } from 'lucide-react';
+import { GithubIcon } from '@/components/SocialIcons';
+import AnimatedSection from './AnimatedSection';
+import { projects } from '@/data/resume';
 
 export default function Projects() {
-  const featured = projects.filter((p) => p.featured)
-  const rest = projects.filter((p) => !p.featured)
+  const featured = projects.filter((p) => p.featured);
+  const rest = projects.filter((p) => !p.featured);
 
   return (
     <section id="projects" className="py-28 px-6 relative">
@@ -19,8 +19,7 @@ export default function Projects() {
         <AnimatedSection>
           <p className="section-tag">Projects</p>
           <h2 className="font-[var(--font-space-grotesk)] text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-16">
-            Things I&apos;ve{' '}
-            <span className="gradient-text">built</span>
+            Things I&apos;ve <span className="gradient-text">built</span>
           </h2>
         </AnimatedSection>
 
@@ -49,7 +48,7 @@ export default function Projects() {
         )}
       </div>
     </section>
-  )
+  );
 }
 
 function ProjectCard({
@@ -57,12 +56,12 @@ function ProjectCard({
   index,
   featured = false,
 }: {
-  project: typeof projects[number]
-  index: number
-  featured?: boolean
+  project: (typeof projects)[number];
+  index: number;
+  featured?: boolean;
 }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
     <motion.div
@@ -118,5 +117,5 @@ function ProjectCard({
         </div>
       </div>
     </motion.div>
-  )
+  );
 }

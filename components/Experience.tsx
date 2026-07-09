@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { Briefcase, Calendar, MapPin, ChevronRight } from 'lucide-react'
-import AnimatedSection from './AnimatedSection'
-import { experience } from '@/data/resume'
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import { Briefcase, Calendar, MapPin, ChevronRight } from 'lucide-react';
+import AnimatedSection from './AnimatedSection';
+import { experience } from '@/data/resume';
 
 export default function Experience() {
   return (
@@ -16,8 +16,7 @@ export default function Experience() {
         <AnimatedSection>
           <p className="section-tag">Experience</p>
           <h2 className="font-[var(--font-space-grotesk)] text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-16">
-            Where I&apos;ve{' '}
-            <span className="gradient-text">worked</span>
+            Where I&apos;ve <span className="gradient-text">worked</span>
           </h2>
         </AnimatedSection>
 
@@ -33,12 +32,12 @@ export default function Experience() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-function ExperienceCard({ job, index }: { job: typeof experience[number]; index: number }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
+function ExperienceCard({ job, index }: { job: (typeof experience)[number]; index: number }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
     <motion.div
@@ -73,7 +72,9 @@ function ExperienceCard({ job, index }: { job: typeof experience[number]; index:
           </div>
         </div>
 
-        <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-4">{job.description}</p>
+        <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-4">
+          {job.description}
+        </p>
 
         <ul className="space-y-2 mb-5">
           {job.highlights.map((h) => (
@@ -86,10 +87,12 @@ function ExperienceCard({ job, index }: { job: typeof experience[number]; index:
 
         <div className="flex flex-wrap gap-2">
           {job.tech.map((t) => (
-            <span key={t} className="skill-badge">{t}</span>
+            <span key={t} className="skill-badge">
+              {t}
+            </span>
           ))}
         </div>
       </div>
     </motion.div>
-  )
+  );
 }

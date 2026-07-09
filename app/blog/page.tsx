@@ -1,14 +1,14 @@
-import Link from 'next/link'
-import { getAllPosts } from '@/lib/blog'
-import { Calendar, ArrowRight } from 'lucide-react'
+import Link from 'next/link';
+import { getAllPosts } from '@/lib/blog';
+import { Calendar, ArrowRight } from 'lucide-react';
 
 export const metadata = {
   title: 'Blog — Tyler Nguyen',
   description: 'Thoughts on software engineering, AI, React, and building things.',
-}
+};
 
 export default async function BlogPage() {
-  const posts = await getAllPosts()
+  const posts = await getAllPosts();
 
   return (
     <div className="min-h-screen pt-28 pb-20 px-6">
@@ -17,8 +17,7 @@ export default async function BlogPage() {
         <div className="mb-16">
           <p className="section-tag">Blog</p>
           <h1 className="font-[var(--font-space-grotesk)] text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-4">
-            Writing &amp;{' '}
-            <span className="gradient-text">thinking</span>
+            Writing &amp; <span className="gradient-text">thinking</span>
           </h1>
           <p className="text-[var(--text-secondary)] text-lg">
             Notes on software engineering, AI tooling, React, and the craft of building products.
@@ -38,7 +37,13 @@ export default async function BlogPage() {
               >
                 <div className="flex items-center gap-3 text-xs text-[var(--text-muted)] mb-3">
                   <Calendar size={12} />
-                  <span>{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                  <span>
+                    {new Date(post.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </span>
                 </div>
 
                 <h2 className="font-[var(--font-space-grotesk)] text-xl font-bold text-[var(--text-primary)] mb-3 group-hover:text-[var(--accent-cyan)] transition-colors">
@@ -67,5 +72,5 @@ export default async function BlogPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

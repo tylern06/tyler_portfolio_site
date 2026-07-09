@@ -1,20 +1,20 @@
-import { PrismaClient } from '@prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
-import fs from 'fs'
-import path from 'path'
-import matter from 'gray-matter'
+import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
-const prisma = new PrismaClient({ adapter })
-const BLOG_DIR = path.join(process.cwd(), 'content/blog')
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const prisma = new PrismaClient({ adapter });
+const BLOG_DIR = path.join(process.cwd(), 'content/blog');
 
 async function main() {
-  const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith('.md'))
+  const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith('.md'));
 
   for (const filename of files) {
-    const raw = fs.readFileSync(path.join(BLOG_DIR, filename), 'utf-8')
-    const { data, content } = matter(raw)
-    const slug = (data.slug as string) ?? filename.replace(/\.md$/, '')
+    const raw = fs.readFileSync(path.join(BLOG_DIR, filename), 'utf-8');
+    const { data, content } = matter(raw);
+    const slug = (data.slug as string) ?? filename.replace(/\.md$/, '');
 
     await prisma.post.upsert({
       where: { slug },
@@ -28,12 +28,12 @@ async function main() {
         published: data.published !== false,
         content,
       },
-    })
+    });
 
-    console.log(`Seeded: ${slug}`)
+    console.log(`Seeded: ${slug}`);
   }
 }
 
 main()
   .catch(console.error)
-  .finally(() => prisma.$disconnect())
+  .finally(() => prisma.$disconnect());

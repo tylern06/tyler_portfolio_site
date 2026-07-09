@@ -1,32 +1,32 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Mail, Send, CheckCircle } from 'lucide-react'
-import { GithubIcon, LinkedinIcon } from '@/components/SocialIcons'
-import AnimatedSection from './AnimatedSection'
-import { personalInfo } from '@/data/resume'
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Mail, Send, CheckCircle } from 'lucide-react';
+import { GithubIcon, LinkedinIcon } from '@/components/SocialIcons';
+import AnimatedSection from './AnimatedSection';
+import { personalInfo } from '@/data/resume';
 
 export default function Contact() {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setStatus('sending')
+    e.preventDefault();
+    setStatus('sending');
 
     const res = await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
-    })
+    });
 
     if (res.ok) {
-      setStatus('sent')
-      setForm({ name: '', email: '', message: '' })
+      setStatus('sent');
+      setForm({ name: '', email: '', message: '' });
     } else {
-      setStatus('idle')
-      alert('Something went wrong — please try again or email me directly.')
+      setStatus('idle');
+      alert('Something went wrong — please try again or email me directly.');
     }
   }
 
@@ -38,11 +38,11 @@ export default function Contact() {
         <AnimatedSection>
           <p className="section-tag">Contact</p>
           <h2 className="font-[var(--font-space-grotesk)] text-4xl sm:text-5xl font-bold text-[var(--text-primary)] mb-6">
-            Let&apos;s{' '}
-            <span className="gradient-text">connect</span>
+            Let&apos;s <span className="gradient-text">connect</span>
           </h2>
           <p className="text-[var(--text-secondary)] text-lg max-w-xl mb-16">
-            I&apos;m open to new opportunities and interesting projects. Whether you have a question or just want to say hi — my inbox is always open.
+            I&apos;m open to new opportunities and interesting projects. Whether you have a question
+            or just want to say hi — my inbox is always open.
           </p>
         </AnimatedSection>
 
@@ -58,8 +58,12 @@ export default function Contact() {
                   <Mail size={18} className="text-[var(--accent-blue)]" />
                 </div>
                 <div>
-                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-0.5">Email</p>
-                  <p className="text-[var(--text-primary)] font-medium text-sm">{personalInfo.email}</p>
+                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-0.5">
+                    Email
+                  </p>
+                  <p className="text-[var(--text-primary)] font-medium text-sm">
+                    {personalInfo.email}
+                  </p>
                 </div>
               </a>
 
@@ -73,8 +77,12 @@ export default function Contact() {
                   <GithubIcon size={18} className="text-[var(--text-secondary)]" />
                 </div>
                 <div>
-                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-0.5">GitHub</p>
-                  <p className="text-[var(--text-primary)] font-medium text-sm">{personalInfo.github.replace('https://', '')}</p>
+                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-0.5">
+                    GitHub
+                  </p>
+                  <p className="text-[var(--text-primary)] font-medium text-sm">
+                    {personalInfo.github.replace('https://', '')}
+                  </p>
                 </div>
               </a>
 
@@ -88,8 +96,12 @@ export default function Contact() {
                   <LinkedinIcon size={18} className="text-[var(--accent-cyan)]" />
                 </div>
                 <div>
-                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-0.5">LinkedIn</p>
-                  <p className="text-[var(--text-primary)] font-medium text-sm">{personalInfo.linkedin.replace('https://', '')}</p>
+                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-0.5">
+                    LinkedIn
+                  </p>
+                  <p className="text-[var(--text-primary)] font-medium text-sm">
+                    {personalInfo.linkedin.replace('https://', '')}
+                  </p>
                 </div>
               </a>
             </div>
@@ -110,10 +122,7 @@ export default function Contact() {
                 <p className="text-[var(--text-secondary)] text-sm">
                   Thanks for reaching out. I&apos;ll get back to you soon.
                 </p>
-                <button
-                  onClick={() => setStatus('idle')}
-                  className="btn-outline mt-2 text-sm"
-                >
+                <button onClick={() => setStatus('idle')} className="btn-outline mt-2 text-sm">
                   Send another
                 </button>
               </motion.div>
@@ -180,5 +189,5 @@ export default function Contact() {
         </div>
       </div>
     </section>
-  )
+  );
 }
