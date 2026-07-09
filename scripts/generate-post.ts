@@ -5,14 +5,14 @@
  * Scheduled:    node scripts/scheduler.js  (runs daily at 7pm local time)
  */
 
-import { PrismaClient } from '@prisma/client'
-import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY
-const MODEL = process.env.OPENROUTER_MODEL ?? 'google/gemini-2.0-flash-001'
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const MODEL = process.env.OPENROUTER_MODEL ?? 'google/gemini-2.0-flash-001';
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
-const prisma = new PrismaClient({ adapter })
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const prisma = new PrismaClient({ adapter });
 
 const TOPICS = [
   'How large language models are changing frontend development workflows',
@@ -26,11 +26,15 @@ const TOPICS = [
   'AI observability: logging, tracing, and debugging LLM applications',
   'How vector databases are reshaping search in modern web apps',
   'Writing better system prompts for coding assistants',
+  'Hands-on Claude Code workflow tips for faster iteration',
+  'Managing prompts, context, and state in Claude Code projects',
+  'Best practices for combining Claude Code with Git-based development',
+  'How to design a productive AI-assisted coding workflow with Claude Code',
   'Edge AI: running models close to users with WebAssembly and ONNX',
   'Agent frameworks compared: LangChain, CrewAI, and building your own',
   'The hidden costs of AI in production: latency, tokens, and UX tradeoffs',
   'Using AI to modernize legacy codebases without breaking everything',
-]
+];
 
 function slugify(title: string): string {
   return title
@@ -38,20 +42,42 @@ function slugify(title: string): string {
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-')
-    .slice(0, 60)
+    .slice(0, 60);
 }
 
 function today(): string {
-  return new Date().toISOString().split('T')[0]
+  return new Date().toISOString().split('T')[0];
+}
+
+function topicTag(topic: string): string {
+  return `topic:${slugify(topic)}`;
 }
 
 async function generatePost(): Promise<void> {
   if (!OPENROUTER_API_KEY) {
-    throw new Error('OPENROUTER_API_KEY is not set in environment')
+    throw new Error('OPENROUTER_API_KEY is not set in environment');
   }
 
-  const topic = TOPICS[Math.floor(Math.random() * TOPICS.length)]
-  console.log(`Generating post on: "${topic}"`)
+  const existingPosts = await prisma.post.findMany({ select: { tags: true } });
+  const usedTopicTags = new Set(
+    existingPosts.flatMap((post) => post.tags.filter((tag) => tag.startsWith('topic:'))),
+  );
+
+  const availableTopics = TOPICS.filter((topic) => !usedTopicTags.has(topicTag(topic)));
+  let topic: string;
+  let topicMetaTag: string;
+
+  if (availableTopics.length === 0) {
+    topic = 'AI news and emerging trends for software engineers';
+    topicMetaTag = `topic:ai-news-${today()}`;
+    console.log(
+      'All static topic types have already been published. Generating a fresh AI news post for today.',
+    );
+  } else {
+    topic = availableTopics[Math.floor(Math.random() * availableTopics.length)];
+    topicMetaTag = topicTag(topic);
+    console.log(`Generating post on: "${topic}"`);
+  }
 
   const systemPrompt = `You are a senior software engineer and technical writer.
 Write an engaging, opinionated blog post for a personal portfolio site.
@@ -71,9 +97,9 @@ Rules:
 - Write from Tyler's perspective with real engineering experience
 - Include specific code examples or concrete patterns where relevant
 - Use a natural, human-like tone with no em dashes
-- No preamble, no explanation: just the JSON object`
+- No preamble, no explanation: just the JSON object`;
 
-  let res: Response
+  let res: Response;
   try {
     res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -92,41 +118,49 @@ Rules:
         response_format: { type: 'json_object' },
         temperature: 0.8,
       }),
-    })
+    });
   } catch (err) {
-    throw new Error(`Network error calling OpenRouter: ${err instanceof Error ? err.message : err}`)
+    throw new Error(
+      `Network error calling OpenRouter: ${err instanceof Error ? err.message : err}`,
+    );
   }
 
   if (!res.ok) {
-    let body = ''
-    try { body = await res.text() } catch { /* ignore */ }
-    throw new Error(`OpenRouter error ${res.status}: ${body}`)
+    let body = '';
+    try {
+      body = await res.text();
+    } catch {
+      /* ignore */
+    }
+    throw new Error(`OpenRouter error ${res.status}: ${body}`);
   }
 
-  let data: { choices?: Array<{ message?: { content?: string } }> }
+  let data: { choices?: Array<{ message?: { content?: string } }> };
   try {
-    data = await res.json()
+    data = await res.json();
   } catch (err) {
-    throw new Error(`Failed to parse OpenRouter response: ${err instanceof Error ? err.message : err}`)
+    throw new Error(
+      `Failed to parse OpenRouter response: ${err instanceof Error ? err.message : err}`,
+    );
   }
 
-  const raw = data.choices?.[0]?.message?.content
-  if (!raw) throw new Error('Empty response from OpenRouter')
+  const raw = data.choices?.[0]?.message?.content;
+  if (!raw) throw new Error('Empty response from OpenRouter');
 
-  let post: { title: string; slug: string; excerpt: string; tags: string[]; content: string }
+  let post: { title: string; slug: string; excerpt: string; tags: string[]; content: string };
   try {
-    post = JSON.parse(raw)
+    post = JSON.parse(raw);
   } catch {
-    throw new Error(`Failed to parse post JSON: ${raw.slice(0, 200)}`)
+    throw new Error(`Failed to parse post JSON: ${raw.slice(0, 200)}`);
   }
 
-  const slug = post.slug || slugify(post.title)
+  const slug = post.slug || slugify(post.title);
 
   try {
-    const existing = await prisma.post.findUnique({ where: { slug } })
+    const existing = await prisma.post.findUnique({ where: { slug } });
     if (existing) {
-      console.log(`Post already exists: ${slug} — skipping`)
-      return
+      console.log(`Post already exists: ${slug} — skipping`);
+      return;
     }
 
     await prisma.post.create({
@@ -134,22 +168,22 @@ Rules:
         slug,
         title: post.title,
         excerpt: post.excerpt,
-        tags: post.tags,
+        tags: [...post.tags, topicMetaTag],
         date: new Date(today()),
         published: true,
         content: post.content,
       },
-    })
+    });
   } catch (err) {
-    throw new Error(`Database error: ${err instanceof Error ? err.message : err}`)
+    throw new Error(`Database error: ${err instanceof Error ? err.message : err}`);
   }
 
-  console.log(`✓ Saved to database: ${slug}`)
+  console.log(`✓ Saved to database: ${slug}`);
 }
 
 generatePost()
   .catch((err) => {
-    console.error('Generation failed:', err.message)
-    process.exit(1)
+    console.error('Generation failed:', err.message);
+    process.exit(1);
   })
-  .finally(() => prisma.$disconnect())
+  .finally(() => prisma.$disconnect());
