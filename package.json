@@ -28,7 +28,6 @@
     "@types/pg": "^8.20.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.3.0",
-    "framer-motion": "^12.40.0",
     "gray-matter": "^4.0.3",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",

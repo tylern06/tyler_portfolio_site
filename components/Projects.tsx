@@ -1,7 +1,3 @@
-'use client';
-
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { ExternalLink, Star } from 'lucide-react';
 import { GithubIcon } from '@/components/SocialIcons';
 import AnimatedSection from './AnimatedSection';
@@ -25,8 +21,8 @@ export default function Projects() {
 
         {/* Featured projects */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {featured.map((project, i) => (
-            <ProjectCard key={project.title} project={project} index={i} featured />
+          {featured.map((project) => (
+            <ProjectCard key={project.title} project={project} />
           ))}
         </div>
 
@@ -40,8 +36,8 @@ export default function Projects() {
               </h3>
             </AnimatedSection>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {rest.map((project, i) => (
-                <ProjectCard key={project.title} project={project} index={i + featured.length} />
+              {rest.map((project) => (
+                <ProjectCard key={project.title} project={project} />
               ))}
             </div>
           </>
@@ -51,26 +47,9 @@ export default function Projects() {
   );
 }
 
-function ProjectCard({
-  project,
-  index,
-  featured = false,
-}: {
-  project: (typeof projects)[number];
-  index: number;
-  featured?: boolean;
-}) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
-
+function ProjectCard({ project }: { project: (typeof projects)[number] }) {
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: index * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="group glass-card rounded-2xl overflow-hidden flex flex-col"
-    >
+    <div className="group glass-card rounded-2xl overflow-hidden flex flex-col">
       {/* Card gradient header */}
       <div className={`h-36 bg-gradient-to-br ${project.gradient} relative`}>
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.15)_0%,_transparent_70%)]" />
@@ -116,6 +95,6 @@ function ProjectCard({
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

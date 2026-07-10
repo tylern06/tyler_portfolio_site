@@ -1,7 +1,3 @@
-'use client';
-
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import AnimatedSection from './AnimatedSection';
 import { skills } from '@/data/resume';
 
@@ -26,13 +22,12 @@ export default function Skills() {
         </AnimatedSection>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Object.entries(skills).map(([category, items], catIdx) => (
+          {Object.entries(skills).map(([category, items]) => (
             <SkillCategory
               key={category}
               category={category}
               items={items}
               icon={categoryIcons[category] ?? '•'}
-              index={catIdx}
             />
           ))}
         </div>
@@ -45,24 +40,13 @@ function SkillCategory({
   category,
   items,
   icon,
-  index,
 }: {
   category: string;
   items: string[];
   icon: string;
-  index: number;
 }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
-
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: index * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="glass-card rounded-2xl p-6"
-    >
+    <div className="glass-card rounded-2xl p-6">
       <div className="flex items-center gap-2 mb-5">
         <span className="text-xl">{icon}</span>
         <h3 className="font-[var(--font-space-grotesk)] font-semibold text-[var(--text-primary)] text-sm">
@@ -70,18 +54,12 @@ function SkillCategory({
         </h3>
       </div>
       <div className="flex flex-wrap gap-2">
-        {items.map((skill, i) => (
-          <motion.span
-            key={skill}
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: index * 0.1 + i * 0.04 + 0.2, duration: 0.3 }}
-            className="skill-badge"
-          >
+        {items.map((skill) => (
+          <span key={skill} className="skill-badge">
             {skill}
-          </motion.span>
+          </span>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }

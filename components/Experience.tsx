@@ -1,7 +1,3 @@
-'use client';
-
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { Briefcase, Calendar, MapPin, ChevronRight } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import { experience } from '@/data/resume';
@@ -25,8 +21,8 @@ export default function Experience() {
           <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-[var(--accent-blue)] via-[var(--border-subtle)] to-transparent hidden md:block" />
 
           <div className="space-y-8">
-            {experience.map((job, i) => (
-              <ExperienceCard key={job.company} job={job} index={i} />
+            {experience.map((job) => (
+              <ExperienceCard key={job.company} job={job} />
             ))}
           </div>
         </div>
@@ -35,18 +31,9 @@ export default function Experience() {
   );
 }
 
-function ExperienceCard({ job, index }: { job: (typeof experience)[number]; index: number }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
-
+function ExperienceCard({ job }: { job: (typeof experience)[number] }) {
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, x: -20 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ delay: index * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="md:pl-16 relative"
-    >
+    <div className="md:pl-16 relative">
       {/* Timeline dot */}
       <div className="hidden md:flex absolute left-0 top-6 w-12 h-12 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] items-center justify-center">
         <Briefcase size={16} className="text-[var(--accent-blue)]" />
@@ -93,6 +80,6 @@ function ExperienceCard({ job, index }: { job: (typeof experience)[number]; inde
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

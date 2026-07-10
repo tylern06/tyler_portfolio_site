@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Mail, Send, CheckCircle } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from '@/components/SocialIcons';
 import AnimatedSection from './AnimatedSection';
@@ -48,7 +47,7 @@ export default function Contact() {
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Contact details */}
-          <AnimatedSection direction="left">
+          <AnimatedSection>
             <div className="space-y-6">
               <a
                 href={`mailto:${personalInfo.email}`}
@@ -108,13 +107,9 @@ export default function Contact() {
           </AnimatedSection>
 
           {/* Contact form */}
-          <AnimatedSection direction="right" delay={0.1}>
+          <AnimatedSection>
             {status === 'sent' ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="glass-card rounded-2xl p-10 flex flex-col items-center justify-center gap-4 text-center min-h-[360px]"
-              >
+              <div className="glass-card rounded-2xl p-10 flex flex-col items-center justify-center gap-4 text-center min-h-[360px]">
                 <CheckCircle size={40} className="text-emerald-400" />
                 <h3 className="font-[var(--font-space-grotesk)] text-xl font-bold text-[var(--text-primary)]">
                   Message sent!
@@ -125,7 +120,7 @@ export default function Contact() {
                 <button onClick={() => setStatus('idle')} className="btn-outline mt-2 text-sm">
                   Send another
                 </button>
-              </motion.div>
+              </div>
             ) : (
               <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-8 space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">

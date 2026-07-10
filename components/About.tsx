@@ -1,15 +1,8 @@
-'use client';
-
-import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
 import { MapPin, Mail, Download } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import { personalInfo, stats } from '@/data/resume';
 
 export default function About() {
-  const statsRef = useRef(null);
-  const statsInView = useInView(statsRef, { once: true, margin: '-60px' });
-
   return (
     <section id="about" className="py-28 px-6">
       <div className="max-w-6xl mx-auto">
@@ -22,7 +15,7 @@ export default function About() {
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Photo + contact info */}
-          <AnimatedSection direction="left">
+          <AnimatedSection>
             <div className="space-y-6">
               {/* Avatar */}
               <div className="relative w-fit">
@@ -75,7 +68,7 @@ export default function About() {
           </AnimatedSection>
 
           {/* Bio text */}
-          <AnimatedSection direction="right" delay={0.1}>
+          <AnimatedSection>
             <div className="space-y-5">
               {personalInfo.bio.map((paragraph, i) => (
                 <p
@@ -87,20 +80,14 @@ export default function About() {
               ))}
 
               {/* Stats */}
-              <div ref={statsRef} className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
-                {stats.map((stat, i) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={statsInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: i * 0.1 + 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="glass-card rounded-xl p-4 text-center"
-                  >
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="glass-card rounded-xl p-4 text-center">
                     <div className="font-[var(--font-space-grotesk)] text-2xl font-bold gradient-text">
                       {stat.value}
                     </div>
                     <div className="text-xs text-[var(--text-muted)] mt-1">{stat.label}</div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>

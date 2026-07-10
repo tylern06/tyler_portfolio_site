@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import ThemeToggle from './ThemeToggle';
 
@@ -49,10 +48,7 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+      <header
         className={cn(
           'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
           scrolled
@@ -115,45 +111,37 @@ export default function Navbar() {
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </nav>
-      </motion.header>
+      </header>
 
       {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-[57px] z-40 bg-[var(--bg-primary)]/95 backdrop-blur-xl border-b border-[var(--border-subtle)] md:hidden"
-          >
-            <ul className="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="block px-3 py-2.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5 transition-all text-sm font-medium"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-              <li className="pt-2 flex items-center gap-3">
-                <a
-                  href="/Tyler_Nguyen_Software_Engineer_Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary flex-1 justify-center"
+      {mobileOpen && (
+        <div className="fixed inset-x-0 top-[57px] z-40 bg-[var(--bg-primary)]/95 backdrop-blur-xl border-b border-[var(--border-subtle)] md:hidden">
+          <ul className="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5 transition-all text-sm font-medium"
                 >
-                  Resume
-                </a>
-                <ThemeToggle />
+                  {link.label}
+                </Link>
               </li>
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            ))}
+            <li className="pt-2 flex items-center gap-3">
+              <a
+                href="/Tyler_Nguyen_Software_Engineer_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary flex-1 justify-center"
+              >
+                Resume
+              </a>
+              <ThemeToggle />
+            </li>
+          </ul>
+        </div>
+      )}
     </>
   );
 }
