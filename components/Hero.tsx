@@ -9,8 +9,6 @@ const roles = [
   'Full Stack Engineer',
   'React Specialist',
   'TypeScript Advocate',
-  'UI/UX Craftsman',
-  'Open Source Contributor',
 ];
 
 function useTypewriter(words: string[], speed = 80, pause = 2200) {
