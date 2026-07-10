@@ -90,15 +90,10 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          {/* Name */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="font-[var(--font-space-grotesk)] text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.05] mb-4"
-          >
+          {/* Name — rendered without an entry animation so it paints immediately as the LCP element */}
+          <h1 className="font-[var(--font-space-grotesk)] text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.05] mb-4">
             Hi, I&apos;m <span className="gradient-text">Tyler Nguyen</span>
-          </motion.h1>
+          </h1>
 
           {/* Typewriter role */}
           <motion.div
