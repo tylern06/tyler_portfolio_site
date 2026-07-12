@@ -52,7 +52,7 @@ export default function Navbar() {
         className={cn(
           'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
           scrolled
-            ? 'bg-[var(--bg-primary)]/90 backdrop-blur-xl border-b border-[var(--border-subtle)] py-3'
+            ? 'bg-[var(--bg-primary)]/90 md:backdrop-blur-xl border-b border-[var(--border-subtle)] py-3'
             : 'py-5',
         )}
       >
@@ -115,7 +115,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="fixed inset-x-0 top-[57px] z-40 bg-[var(--bg-primary)]/95 backdrop-blur-xl border-b border-[var(--border-subtle)] md:hidden">
+        <div className="fixed inset-x-0 top-[57px] z-40 bg-[var(--bg-primary)]/95 border-b border-[var(--border-subtle)] md:hidden">
           <ul className="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-1">
             {navLinks.map((link) => (
               <li key={link.href}>
