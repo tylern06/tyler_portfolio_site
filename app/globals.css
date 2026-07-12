@@ -168,13 +168,20 @@ body {
 /* Glass card */
 .glass-card {
   background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-subtle);
   transition:
     border-color 0.3s ease,
     transform 0.3s ease,
     box-shadow 0.3s ease;
+}
+
+/* backdrop-filter blur is expensive to composite on mobile GPUs and causes
+   janky scroll/paint on sections with several stacked glass-card elements */
+@media (min-width: 768px) {
+  .glass-card {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
 }
 
 .glass-card:hover {
